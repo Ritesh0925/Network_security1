@@ -1,0 +1,12 @@
+venv1/
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*.pyc
+.git/
+.gitignore
+.env
+Artifacts/
+logs/
+Network_security1.egg-info/

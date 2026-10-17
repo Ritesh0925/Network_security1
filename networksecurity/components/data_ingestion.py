@@ -16,7 +16,10 @@ from sklearn.model_selection import train_test_split
 from dotenv import load_dotenv
 load_dotenv()
 
-MONGO_DB_URL=os.getenv("MONGO_DB_URL")
+import certifi
+ca = certifi.where()
+
+MONGO_DB_URL = os.getenv("MONGO_DB_URL") or os.getenv("MONGODB_URL_KEY")
 
 
 class DataIngestion:
@@ -33,7 +36,7 @@ class DataIngestion:
         try:
             database_name=self.data_ingestion_config.database_name
             collection_name=self.data_ingestion_config.collection_name
-            self.mongo_client=pymongo.MongoClient(MONGO_DB_URL)
+            self.mongo_client=pymongo.MongoClient(MONGO_DB_URL, tlsCAFile=ca)
             collection=self.mongo_client[database_name][collection_name]
 
             df=pd.DataFrame(list(collection.find()))
@@ -44,7 +47,7 @@ class DataIngestion:
             
             return df
         except Exception as e:
-            raise NetworkSecurityException from e
+            raise NetworkSecurityException(e, sys)
         
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
         try:
@@ -99,4 +102,4 @@ class DataIngestion:
             return dataingestionartifact
 
         except Exception as e:
-            raise NetworkSecurityException from e
+            raise NetworkSecurityException(e, sys)

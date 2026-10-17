@@ -1,10 +1,26 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: Network_security1
 Version: 0.0.1
 Author: Ritesh Kumar
 Author-email: Ritesh06@gmail.com
+License-File: LICENSE
 Requires-Dist: python-dotenv
 Requires-Dist: pandas
 Requires-Dist: numpy
 Requires-Dist: pymongo
 Requires-Dist: certifi
+Requires-Dist: pymongo[srv]
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: mlflow
+Requires-Dist: pyyaml
+Requires-Dist: dagshub
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: python-multipart
+Requires-Dist: jinja2
+Requires-Dist: dill
+Dynamic: author
+Dynamic: author-email
+Dynamic: license-file
+Dynamic: requires-dist

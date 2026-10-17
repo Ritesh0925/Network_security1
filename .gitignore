@@ -1,2 +1,11 @@
-venv1
+venv1/
 .env
+__pycache__/
+*.pyc
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+Artifacts/
+logs/
+prediction_output/
+*.egg-info/

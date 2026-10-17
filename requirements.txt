@@ -3,5 +3,16 @@ pandas
 numpy
 pymongo
 certifi
+pymongo[srv]
 scikit-learn
+scipy
+mlflow
+pyyaml
+dagshub
+fastapi
+uvicorn
+python-multipart
+jinja2
+dill
+
 ##-e .
