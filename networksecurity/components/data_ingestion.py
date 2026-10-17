@@ -34,19 +34,28 @@ class DataIngestion:
         Read data from mongodb
         """
         try:
-            database_name=self.data_ingestion_config.database_name
-            collection_name=self.data_ingestion_config.collection_name
-            self.mongo_client=pymongo.MongoClient(MONGO_DB_URL, tlsCAFile=ca)
-            collection=self.mongo_client[database_name][collection_name]
+            database_name = self.data_ingestion_config.database_name
+            collection_name = self.data_ingestion_config.collection_name
+            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL, tlsCAFile=ca, serverSelectionTimeoutMS=5000)
+            collection = self.mongo_client[database_name][collection_name]
 
-            df=pd.DataFrame(list(collection.find()))
+            df = pd.DataFrame(list(collection.find()))
             if "_id" in df.columns.to_list():
-                df=df.drop(columns=["_id"])
-            
-            df.replace({"na":np.nan},inplace=True)
-            
+                df = df.drop(columns=["_id"])
+            if df.empty:
+                raise Exception("MongoDB collection returned no records.")
+            df.replace({"na": np.nan}, inplace=True)
             return df
         except Exception as e:
+            logging.warning(f"Could not fetch data from MongoDB Atlas: {e}. Falling back to local dataset if available.")
+            local_file = os.path.join("Network_Data", "phisingData.csv")
+            if os.path.exists(local_file):
+                logging.info(f"Loading fallback dataset from: {local_file}")
+                df = pd.read_csv(local_file)
+                if "_id" in df.columns.to_list():
+                    df = df.drop(columns=["_id"])
+                df.replace({"na": np.nan}, inplace=True)
+                return df
             raise NetworkSecurityException(e, sys)
         
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
